@@ -1,0 +1,562 @@
+
+\section{Kanalzugriff und Modulation }
+\subsection{Kanalzugriff}
+	Den Kanalzugriff muss nur für Systeme mit mehreren unterschidlichen Sender bzw.
+	Empfängern geregelt werden. Folgende Möglichkeiten bestehen:\\
+
+\subsection{FDMA - Frequency Division Multiple Access - Frequenz-Multiplexing} 
+Prinzip:\\Jeder Benutzer sendet auf einer zugewiesenen Frequenz mit einer definierten Bandbreite.\\
+		Einsatzort:\\FM, aber auch GSM im Up-, wie auch im Downlink-Band (siehe
+		Bild)\\
+\subsection{TDMA - Time Division Multiple Access - Zeit-Multiplexing}
+
+
+\begin{tabular}{ll}
+\parbox{11cm}{
+		Prinzip:\\Jeder Benutzer bekommt einen bestimmten Zeitschlitz, um in
+		diesem Pakete senden zu können. Nach einer gewissen Zeit (Frame) wiederholt sich das
+		ganze\\
+		Einsatzort:\\zB. GSM: In einem Frame von 4.615ms hat es jeweils 8
+		Teilnehmern (siehe Bild).}
+    & \parbox{9cm}{
+        \includegraphics[width=6cm]{../MobKom1/bilder/modulation_TDMA.png}
+        } \\
+\parbox{11cm}{
+		Speziell: ALOHA\\
+		Für die Zuordnung der Zeitschlitze für einen neuen Teilnehmer meldet sich
+		dieser zuerst bei der Basisstation. Dabei kann es zu Kollisionen mit anderen
+		Teilnehmern kommen. Erneutes Melden bei der Basisstation erfolgt beim
+		ALOHA-Prinzip erfolgt nach einer zufällige Zeitdauer, womit die erneute
+		Kollision vermieden wird.} 
+	& \parbox{9cm}{
+	    \includegraphics[width=6cm]{../MobKom1/bilder/modulation_aloha.png}
+	    }
+\end{tabular}
+
+\subsection{CDMA - Code Division Multiple Access - Code Multiplexing}
+ 
+Prinzip:\\
+Die Trägerfrequenzen werden mit Hilfe eines Codes zeitlich variiert. Durch eine
+Korrelation mit demselben Codes kann man die richtigen Daten auch bei
+Überlagerungen wieder herausfiltern. Deshalb können viele Sender bzw.
+Empfänger auf demselben Frequenzband arbeiten. CDMA brauch jedoch durch das
+Frequenzhopping auch mehr Bandbreite.\\
+Vorteil/Nachteile:\\
++ \textbf{Privacy: }Die Daten sind nur für die Empfänger mit den richtigen Codes
+sichtbar.\\
++ \textbf{Fading immunity: }Sicher gegen Frequenzlöcher (da CDMA eine grosse
+Bandbreite benutzt).\\
++ \textbf{Jamming resistans: }Störsicher gegen schmalbandige Störsignale. \\
++ \textbf{Low spectral densy: } Signal kann sogar unterhalb des termischen
+Rauschens sein\\
++ \textbf{Soft Handover: } Mit CDMA ist es möglich einen Antennenwechsel
+praktisch ohne Unterbruch zu machen, da nur der Code gewechselt wird und
+keine Frequenzen.\\
++ Bei wenigen Teilnehmern sehr gute SNR\\
++ Gut für unkoordinierte Teilnehmer (da keine Absprachen bezüglich
+Zeitschlitz, Kanalfrequenz, etc. nötig sind).\\
+- \textbf{Near-Far Problem: }Schlechtes Near-Far-Verhalten
+(wenn ein starker (naher) Teilnehmer einen schwachen (fernen) unterdrückt). \\
+- \textbf{komplexity: } Viel komplexerer Empfang. Man muss korrelieren, den
+Dopppler Shift ausgleichen, etc. Synchronisiation sehr schwer.\\
+
+% TODO: more about m-sequence
+\textbf{more about m-sequencen}\\\\
+% TODO: more about spreadingn Gain
+\textbf{Spreadingn Gain}\\
+$G=10 \log_{10}(\frac{SNR_{out}}{SNR_{in}})= 10
+\log_{10}(\frac{B_{SS}}{B_d}=\frac{nach Spreading}{original})=10
+\log_{10}(\frac{T_d}{T_c=ChipTime})$
+
+\subsubsection{Korrelation}
+	\begin{minipage}{6cm}
+    	\includegraphics[width=6cm]{../MobKom2/bilder/GPS-Autokorrelation.png}
+    \end{minipage}
+	\begin{minipage}{6cm}
+    	\includegraphics[width=6cm]{../MobKom2/bilder/GPS-Autokorr_Sequenz.png}
+    \end{minipage}
+	\begin{minipage}{6cm}
+    	Der Peak der Autokorrelation ist 1023 hoch. Da eine Sequenz immer eine
+    	ungerade Anzahl an Bits hat, ist sonst der Wert bei der
+    	Auto- wie auch bei der Kreuzkorrelation -1. Ausserdem können
+    	auch die Werte +63 und -65 vorkommen.\\
+    	Falls ein Satellitensignal um
+    	$20\log_{10}(\frac{1023}{63})=23.9\text{dB}$ stärker ist, kann eine
+    	Verwechslung auftreten.
+    \end{minipage}
+
+\subsubsection{Acquisition}
+
+	\begin{center}
+    	\includegraphics[width=14cm]{../MobKom2/bilder/GPS-Phasenlock.jpg}\\
+    \end{center}
+
+	Um die Satelliten zu finden muss in 3 Dimensionen gesucht werden:
+	\begin{liste}
+    	\item SV nummer: 	1 bis 28 (Anz: 28)
+    	\item Code Phase: 	0 bis 2045 (halbe Bitbreite) (Anz: 2046)
+    	\item Frequenz:		-35kHz bis +35kHz (Da ca 20ppm = 30kHz und $\pm$ 5kHz
+    	Dopplershift in je 500Hz Schritten) (Anz:141)
+    \end{liste}
+	Das ergibt ohne jegliches Vorwissen für jeden Satellit $N=2046\cdot
+	141=288486$ Möglichkeiten.\\
+	Für die Auswertung muss $s=I_P^2+Q_P^2$ gerechnet werden (Korrelation) und eine
+	Peakdedection vorgenommen werden.
+\subsubsection{Chip resolution}
+	\begin{minipage}{10cm}
+	    \includegraphics[width=8cm]{../MobKom2/bilder/GPS-ChipResolution.png}
+    \end{minipage}
+	\begin{minipage}{8cm}
+    	Da die Phase nicht genau bekannt ist, treten bei der Dedektion des
+		Spitztes der Autokorrelation Verluste auf, da nicht mehr das maximum erwischt
+		wird.\\
+		$\text{loss [dB]}= 20 \log_{10}\left(1-\frac{|\Delta
+		t|}{T_{\mathrm{chip}}}\right)$\\
+    \end{minipage}
+\subsubsection{Frequenz resolution}
+	\begin{minipage}{8cm}
+    	\includegraphics[width=6cm]{../MobKom2/bilder/GPS-FrequenzResolution.png}
+    \end{minipage}
+	\begin{minipage}{10cm}
+	    Bei einem unbekannten Doppler Shift und einer unbekannten Frequenzabweichung
+		treten in der Integration Verluste auf.\\
+		$\text{loss [dB]}= 20 \log_{10} \frac{\sin(\pi f_{\mathrm{offset}}T)} {\pi
+		f_{\mathrm{offset}}T}$\\
+     	Grafik links zeigt den Verlust nach der Integration von einer Sequenz
+     	(1ms).
+    \end{minipage}
+    
+\subsection{OFDM - Orthogonal Frequency Division Multiplexing}
+
+\begin{tabular}{ll}
+\parbox{12cm}{
+Funktioniert ähnlich wie FDMA, nur werden hier zueinander orthogonal stehende
+Trägersignale verwendet, wobei jeder Träger ein Symbol (ein oder mehrere Bits)
+repräsentiert. Die Trägerfrequenz sind jeweils ein Vielfaches der 
+$\frac{1}{T_S}=\frac{1}{Symboldauer}$. Laut Definition ist dann:
+\\
+$ \int^{T}_0 e^{j2\pi f_i t} e^{-j2\pi f_j t} = \int_0^{T_S} \sin (2\pi f_i
+t)\sin (2\pi f_j t) dt = \left\{\begin{array}{l@{\,\,\,\,} l}
+         0 , &   i\not = j, \\ 
+         1 , &   i = j .   \end{array} \right.$\\
+Daraus folgt, dass die bei FDMA übliche Sicherheitsabstände zwischen den Trägern
+null sind. 
+       } 
+&
+\parbox{6cm}{
+    \includegraphics[width=6cm]{../MobKom1/bilder/modulation_OFDM-orthogonal.png}\\
+    \small Orthogonalität der Träger
+}       
+\end{tabular}
+\begin{center}
+    \includegraphics[width=15cm]{../MobKom1/bilder/modulation_OFDM-schematic.png}\\
+    \small Blockschaltbild - OFDM Sender und Empfänger
+\end{center}
+
+\begin{tabular}{lll}
+\parbox{4cm}{
+$$\frac W{B_{\text{coh}}} \ll N_c \ll WT_{\text{coh}} $$ 
+$$ T_{\text{coh}} < \dfrac{N_c}{R} = T_{\text{Subcarrier}} $$
+       } 
+&
+\parbox{5cm}{
+   $W$: Gesamtbandbreite \\
+   $\dfrac{W}{N_C}$: Subcarrier Bandbreite \\
+   $R$: Symbolrate (gesamtes Band)
+}       
+&
+\parbox{9cm}{
+   $N_C$: Anzahl Subcarrier bzw. Kanäle \\
+   $B_{\text{coh}}$: Kohärenzbandbreite \\
+   $T_{\text{coh}}$: Kohärenzzeit (Zeitinvarianz Übertragungskanal)
+}       
+\end{tabular}
+
+Im Vergleich zur seriellen Übertragung ergibt sich bei der gleichen
+Übertragungsrat eine viel längere
+Symbolzeit, da die Daten parallel übertragen werden ergibt. Dies
+ermöglicht es den Subcarrier gegenüber Einträgerverfahren, viel weniger
+Bandbreite zu nutzen. So wird die Symboldauer viel länger, so dass die Kanal
+- Laufzeit bzw. Echos einen viel kleiner Einfluss hat.
+\\
+\subsubsection{Nachteil}
+\textbf{PAPR}:\\
+Der PAPR - Peak-to-Average-Power Ratio ist ist teils sehr gross.
+PAPR =  Verhältniss von Spitzen in der Ausgangsleistung zu Durchschnittleistung.
+$PAPR = \frac{P_{Peak}}{P_{Av} } $ für OFDM ohne Korrektur mit BPSK:
+$PAPR=\frac{N^2 P_{sub}}{N P_{sub}}=N$\\ \\
+Möglichkeiten den PAPR zu verkleinern:
+\begin{liste}
+	\item 	\textbf{redundant selection:} ein Symbol kann 2 unterschiedliche QAM
+	Positionenen einnehmen. (je nachdem hat das Symbol eine Phasen, welche dann ein besseres
+	PAPR ergibt)
+	\item 	\textbf{coding technics:} Schon im digitalen Bereich werden
+	Konstellationen mit grossen Peaks vermieden.
+	\item	\textbf{soft clipping beim power amplifier:} Die Spitzen werden langsam
+	unterdrückt (es gibt Oberschwingungen welche dann wiederum Fehler ergeben). Mit
+	einer Fehlerkorrektur können diese jedoch wieder herausgerechnet werden.
+	\item	\textbf{tone/frequnz reservation:} falls bei den Datenfrequenzen alle
+	+, die Reserventöne werden - gesetzt\\
+\end{liste}
+
+Problem der \textbf{Multidimensional Interference (MDI)}:
+\begin{liste}
+    \item \textbf{Intersymbolic Interference (ISI)} \\
+            Symbole überlappen sich im Zeitbereich (wegen Faltung mit Impulsantwort des Kanals - Laufzeit, Echo, usw.)
+    \item \textbf{Inter Channel Interference (ICI)} \\
+            Subcarrier sind nicht mehr orthogonal. Ursachen ist unter
+            anderem, dass der Kanal nicht Zeitinvariant ist. $\Rightarrow$ Es
+            gibt Frequenzverschiebungen.
+            Einen weiteren Ursache kommt vom ISI:\\
+\end{liste}
+
+\begin{tabular}{lll}
+	\parbox{6cm}{ 
+    \includegraphics[width=6cm]{../MobKom1/bilder/modulation_OFDM-ICI.png}\\
+	}    
+	& \parbox{6cm}{Ein nicht-sinusförmiges Signal (Bild links) hätte mehrere/höhere
+	Frequenzkomponenten zur Folge, welche in andere Subcarrier überlappen würden -
+	\textbf{ICI}. Um dies zu verhindern wird das Signal mit einem sogenannten \textbf{Cyclic
+	Prefix} (Bild rechts) versehen, sodass ein reines sinusförmiges Signal
+	resultiert. \\	
+	} &
+	\parbox{6cm}{
+	\includegraphics[width=6cm]{../MobKom1/bilder/modulation_OFDM-prefix.png}\\ }       
+\end{tabular}
+
+
+
+\section{Modulation}
+Die analogen continuierlichen Modulationsarten wie AM, FM und PM werden hier
+nicht behandelt. Es wird von digitalen Daten ausgegangen.
+
+\subsection{Komplexes Basisband }
+Generell ist ein RF- Signal symmetrisch bezüglich des Nullpunktes
+($A_1=A_{-1}$)nicht jedoch bezüglich des RF Trägers. Dies hat zur Folge, dass
+das demodulierte Signal nicht mehr symetrisch zu Null ist, was bedeutet, dass
+es ein komplexes Spektrum ist. $s_{RF}(t)=\Re(s_{bb}(t)e^{j2\pi f_{RF}t})$\\
+\begin{tabular}{lll}
+	\parbox{5cm}{
+		\includegraphics[width=5cm]{../MobKom1/bilder/modulation_RFSpektrum.png}
+	}
+	&$\Longrightarrow$
+	&\parbox{5cm}{
+		\includegraphics[width=5cm]{../MobKom1/bilder/modulation_BBSpektrum.png}
+	}
+\end{tabular}
+
+\subsection{BPSK - Binary Phase Shift Keying  }
+\begin{tabular}{ll}
+	\parbox{10cm}{
+		\begin{tabular}{ll}
+			BPSK&= 2-PAM \\
+			Phase $\in \{-180^o, 0$\} &= Amplitude $\in \{-1, 1\}$
+		\end{tabular}\\
+		Bild rechts zeigt Amplitude und Phase des Basisbandes genau zur sampling
+		time.\\
+	}
+	&
+	\parbox{5cm}{
+		\includegraphics[width=5cm]{../MobKom1/bilder/modulation_constellationBPSK.png}
+	}
+\end{tabular}
+\subsection{M-PAM - Pulse Amplitude Modulation }
+M kommt von M- Zuständen, welche die Amplitude annehmen kann. Dadurch können
+$N=\log_2(M) [\frac{bits}{Symbol}]$ übertragen werden. Durch die Abstufung wird
+die Effizienz gesteigert. Da PAM ein reelles Spektrum besitzt ist auch das
+RF-Signal symmetrisch zum Träger, was jedoch die Bandbreiteneffizient stark
+vermindert. Mögliche Verbesserungen:\\
+\begin{liste}
+	\item Zusätzlicher Imaginäranteil $\Longrightarrow$ QAM
+	\item Grösseres M (Nachteil: grössere Fehlerwahrscheindlichkeit und
+	immernoch symetrisch)
+	\item Eliminierung des einen Frequenzbandes(z.B mit SSB)
+\end{liste}
+
+\subsection{M-QAM - Quadratur Amplitude Modluation }
+\begin{tabular}{ll}
+\parbox{10cm}{
+	Bei QAM wird die Phase und Amplidue verändert. Um eine optimale Ausnützung zu
+	erhalten soll $M=2^n$ gewählt werden, wobei $n \epsilon \mathbb{N}$ und 
+	$n=N=\frac{bit}{Symbol}$ist.\\
+	Falls n gerade dann ergibt es ein vollständiges Viereck.\\
+	Bei n ungerade ergibt sich ein Viereck ohne die Ecken.\\
+	Spezialfall: 4- QAM = QPSK\\
+	Das Problem für die MobKom an QAM ist, dass sich die Amplitudedämpfung sehr
+	stark und relativ schnell ändern kann. Deshalb kann man keine Information als
+	Amplitudenänderung senden, was dann nur noch eine Phasenverschiebung (M-PSK)
+	zur Folge hat.} 
+	& \parbox{8cm}{
+	\includegraphics[width=8cm]{../MobKom1/bilder/modulation_constellationQAM.png}\\ 256-QAM und 32-QAM
+}
+\end{tabular}
+
+\subsection{M-PSK - Phase Shift Keying }
+\begin{tabular}{ll}
+\parbox{10cm}{
+Spezielle Formen:\\
+\begin{liste}
+ \item Bei \textit{D}PSK kommt es nicht mehr auf die
+	absolute Phase an, sondern nur noch auf den Phasensprung von Symbol zu Symbol
+	(z.B. je $\frac{\pi}{4}$). So ist keine Referenz zur Nullphase nötig.
+ \item \textit{$\frac{3\pi}{8}$} oder \textit{EDGE-Modulationschema} wird bei
+ GSM eingesetzt. Der Vorsatz \textit{$\frac{3\pi}{8}$} bedeutet, dass zu
+ einem normalen Phasensprung (hier $n \frac{\pi}{4}$ nochmals einen Offset
+ von $\frac{\pi}{8}$ hinzu kommt. Dies hat zur Folge, dass die komplexe
+ Amplitude nie null wird. (siehe Bild)
+\end{liste}
+
+
+}
+&\parbox{6cm}{
+    \includegraphics[width=6cm]{../MobKom1/bilder/modulation_constellationEDGE.png}\\
+    $\frac{3 \pi}{8}$ 8-PSK
+
+}
+\end{tabular}
+
+\subsection{Gray- Code }
+\begin{tabular}{ll}
+	\parbox{8cm}{
+		Der Vorteil des Gray Codes gegenüber der normalen binären Codierung ist, dass
+		bei einem Fehler nur ein Bit falsch wird und nicht gerade alle, wie das Bild
+		rechts zeigt.\\
+        Bsp. aus Prüfung (12. März 2007): Vergrösserung des BER, wenn bei QPSK
+        die binäre Standardcodierung statt der Gray-Codierung verwendet wird.
+        
+        Gray: BER = SER/2 \\
+        Binär: BER = SER/2 + SER/4 \\
+        Verschlechterung: $\Rightarrow 3/2$   \\ \\
+        
+        Für Gray-Code gilt: $\text{BER} \approx
+        \dfrac{\text{SER}}{n_{\text{bits}}}$ } &\parbox{10cm}{
+		\includegraphics[width=10cm]{../MobKom1/bilder/modulation_PSKmitGray.png}\\
+		8-PSK ohne bzw. mit Gray- Code
+	}
+\end{tabular}
+
+\begin{tabular}{ll}
+	\parbox{9cm}{
+		\subsection{FSK - Frequency Shift Keying }
+		Bei FSK wird ein binäres Signal frequenz-moduliert. Das heisst,
+		es switscht (hihi) zwischen zwei Frequenzen, dies wird meist mit Hilfe eines
+		VCO gemacht.\\
+		Kenngrösse ist der Modulations Index: \\
+		$h=\dfrac{\Delta f}{f_{\text{data}}}=\dfrac{f_{\text{max}} -
+		f_{\text{min}}}{f_{\text{data}}} =\dfrac{n_{\text{T-max}} -
+		n_{\text{T-min}}}{n_\text{T}}$ \\ Bei einem \textbf{h von 0.5 }spricht man von
+		\textbf{Minimum Shift Keying (MSK)} oder \textbf{Fast} Frequency Shift Keying
+		\textbf{(FFSK)}. Trägerfrequenzen können orthogonal sein, solange der
+		Modulationsindex das Minimum $h_{\text{min}}$ nicht unterschreitet. \\ $h_{\text{min}} =
+		\begin{cases} 1   & \text{unkohärente Detektion} \\                                
+                                0.5   & \text{kohärente - phase
+                                synchron - Detektion} \end{cases}$\\
+        Für unkohärente Detektion sind die beiden Träger orthogonal, wenn gilt:
+        \\
+        $    \Delta f = \frac{1}{T_{\text{data}}} \cdot n , \qquad n \in \lbrace
+        1, 2, 3, \ldots \rbrace $
+	}
+	&\parbox{9cm}{
+	\includegraphics[width=9cm]{../MobKom1/bilder/modulation_phasenverschiebungGMSK_MSK.png}\\
+	Phasenverschiebung des MSK bzw GMSK. }
+\end{tabular}
+     
+        
+\subsection{GMSK - Gaussian Minimum Shift Keying }
+Das GMSK ist ein MSK mit einem gauss'schen premodularen Filter. Es besitzt eine
+konstante Amplitude und eine grosse spektrale Effizient.
+        
+
+\subsection{OQPSK - Offset Quadratur Phase Shift Keying \formelbuch{75, 68}}
+Das OQPSK ist eine Sonderform der Quadraturphasenmodulation
+	
+
+\subsection{TCM - Trellis Coded Modulation}
+\subsubsection{Covolutional Coding - Faltungs Code}
+Ein Faltungs Code besitzt zur Logikschaltung zusätzlich noch Memory, so dass
+nicht nur der aktuelle Eingang sondern auch noch n- Vorherige Eingänge zum
+Ausgang verrechnet werden. Es gibt m unterschiedliche Ausgänge. 
+Je nach Vorgeschichte, können nur noch ganz bestimmte Kombinationen auftreten,
+was dann die Decodierung besser macht.\\
+\begin{minipage}{9cm}
+	Beispiel mit k=1; n=2; m=2 => 1/2 codierung\\
+	\includegraphics[width=9cm]{./bilder/covolutionSchemata.png}
+\end{minipage}
+\hspace{5mm}
+\begin{minipage}{8cm}
+\vspace{4mm}
+	mit dazugehörigem Encoder State Diagram\\
+\hspace{5mm}
+	\includegraphics[width=6cm]{./bilder/covolutionStateDiagram.png}
+\end{minipage}
+
+\subsubsection{Decodierung}
+Eine gute Variante die FaltungsCodes zu dekodieren ist dies mit einem Trellis
+Diagram zu machen: \\
+\begin{minipage}{10cm}
+	\begin{liste}
+		\item Zuerst Punkte entsprechend der möglichen Speicherinhalten einzeichnen.
+		\item Mögliche Verbindungen einzeichnen.
+		\item Soll Werte einzeichnen (z.B. 0/00).
+		\item Fehler zu den einzelnen Punkten eintragen (ev. die Euklidische Distanz).
+		\item Wenn zwei Wege zu einem Punkt kommen, den höherwertigen Weg streichen.
+		\item Am Schluss den Weg nehmen der den kleinsten Fehler ergibt.
+	\end{liste}
+\end{minipage}
+\begin{minipage}{9cm}
+	\includegraphics[width=9cm]{./bilder/Trelli.png}
+\end{minipage}
+
+\subsubsection{Euklidische Distanz}
+\begin{minipage}{13cm}
+	Die \textbf{euklidische Distanz} ist der Abstand zwischen zwei
+	unterschiedlichen Modulationspositionen.\\
+	Die \textbf{freie euklidische Distanz} ist der minimaler Abstand zwishcen zwei
+	unterschiedlichen Modulationspositionen in der ganzen Modulation.\\
+	$d^2_{free}=\min \limits_{a_k \neq a_{k}^{'}} \sum \limits_k
+	d^2(a_k,a_{k}^{'})$\\
+	zB.	$d^2_{min}=1 + 1 -2\cos (\alpha)= 2-\sqrt{2} = 0.586$\\
+	Der \textbf{Coding Gain} ist um welchen Faktor der SNR schlechter sein darf.\\
+	$G = \frac{d^2_{free,coded}}{d^2_{min, uncoded}}$
+\end{minipage}
+\begin{minipage}{6cm}
+	\includegraphics[width=6cm]{./bilder/EuklidischeDistanz.png}
+
+\end{minipage}
+\subsubsection{TCM}
+Ziel ist es die Modulation und die Fehlercodierung als Einheit zu betrachten.
+Beim TCM wird der Faltungs Code und PSK bzw QAM miteinander kombiniert. So wird
+je nach dem nicht mehr eine Codekombination nicht mehr möglich sondern eine
+bestimmte Modulationsposition.\\
+\begin{minipage}{9cm}
+	zB. Einem QPSK wird auf ein 8PSK mit einem 2/3 Trelli erweitert. Dadurch
+	entstehen einzelne Partitionen, in welcher die Modulation sein kann:\\
+	\includegraphics[width=9cm]{./bilder/Partition8PSK.png}
+\end{minipage}
+\begin{minipage}{9cm}
+	\includegraphics[width=9cm]{./bilder/Trelli2_3.png}\\
+	Die Euklidische Distanz nimmt nun zu. zB. \\
+	Der Abstand zu 0;0 ist im minimum 2;1 \\
+	$d^2_{free}=d^2(0,2) + d^2(0,1) = 2 +	(2-\sqrt{2})=2.5858$\\
+	Da die Euklidishce Distanz bei QPSK nur 2 ist ist der Coding Gain:
+	$G=\frac{2.5858}2$
+
+\end{minipage}
+
+
+	
+\subsection{Modulationskriterien}
+Es gibt 3 Wege um die Fehlerwahrscheinlichkeit
+herauszufinden:
+\begin{liste}
+	\item Austesten und messen (dauert bei kleiner Fehlerwahrscheinlichkeit so
+	lange, bis ein vernünftiges Resultat erreicht wird).
+	\item Simulieren (dazu ist ein gutes Model nötig, kann unter Umständen gleich
+	lange dauern wie austesten).
+	\item Analystisch mit Symbol- und Biterrorrate.
+\end{liste}
+\subsubsection{SER - Symbolfehlerrate }
+\begin{tabular}{ll}
+\parbox{8cm}{
+    \includegraphics[width=8cm]{../MobKom1/bilder/modulation_AWGN.jpg}
+    }
+& \parbox{9cm}{
+	Die Symbolfehlerrate wird unter anderem verursacht durch das thermische
+	Rauschen (AWGN). Dieses hat die Energie\\ 
+	$\sigma^2=\frac{N_0}{2}$ \\
+	\\
+	Die Fehlerwahrscheinlichkeit ist $P_E=Q(\sqrt{\frac{2 E_S}{N_0}})$ mit $a_1 =
+	E_S, a_2 = -E_S$ und $\lambda_0 = 0$\\
+    }
+\end{tabular}
+
+\small
+\renewcommand{\arraystretch}{0.6}
+% \hspace*{10mm}
+\begin{tabular}[ht]{|l|l|l|l|l|}
+\hline
+Modulation & levels/ & normalized & SER (AWGN)
+           & Comments \\
+scheme     & range   & amplitude  &     &          \\
+\hline \hline
+%&&&&\\[-3mm]
+BPSK & $\pm A$& $A=1$ &
+  $Q{(\sqrt{\frac{2E_s}{N_0}})}$ & \\[2mm]  \hline
+%&&&&\\[-3mm]
+DPSK & $\pm A$& $A=1$ &
+  $2Q(\sqrt{\frac{2E_s}{N_0}})$ & coherent \\ 
+  &&& $\frac{1}{2}e^{-\frac{E_s}{N_0}}$ & noncoherent\\[2mm] 
+\hline
+%&&&&\\[-3mm]
+QPSK & $(\pm 1\pm j)A$ & $A=\frac{1}{\sqrt{2}}$&
+  $ 1-\left(1-Q(\sqrt{\frac{E_s}{N_0}})\right)^2$ & coherent \\[2mm] \hline
+%&&&&\\[-3mm]
+DQPSK &$(\pm 1\pm j)A$ & $A=\frac{1}{\sqrt{2}}$& 
+  $ 2\left(1-\left(1-Q(\sqrt{\frac{E_s}{N_0}})\right)^2\right)$ & coherent \\
+&&&  $\frac{1}{2}e^{-\frac{E_s}{2N_0}}$ & noncoherent\\[2mm] \hline
+%&&&&\\[-3mm]
+$M$-PSK & $ \frac{1}{M}\sum_{m=1}^{M}
+             A\delta\left(x- e^{j(2m-1)\frac{\pi}{M}}\right),$ & $A=1$&
+  $ \leq 2Q(\sqrt{\frac{2E_s}{N_0})\sin\frac{\pi}{M}})$
+  & coherent \\
+& $\qquad \qquad \qquad \qquad \,\,\,\,\, m\le M$ &&& \\[2mm] \hline
+%&&&&\\[-3mm]
+$M$-PAM & $\pm (2m-1)A,\quad m\le M/2$ & $A=\sqrt{\frac{3}{M^2-1}}$ &
+  $2\frac{M-1}{M}Q\left(\sqrt{\frac{E_s}{N_0}}\sqrt{\frac{6}{M^2-1}}\right)$ &
+  \\[2mm]  \hline
+%&&&&\\[-3mm]
+$M$-QAM & $(\pm (2m-1)\pm j(2n-1))A,$ & $A=\sqrt{\frac{3}{2(M-1)}}$ 
+  &$1-\left(1-2\frac{\sqrt{M}-1}{\sqrt{M}}Q\left(\sqrt{\frac{E_s}{N_0}}
+   \sqrt{\frac{3}{M-1}}\right)\right)^2$ & \\
+& $\qquad \qquad \quad m,n\le \sqrt{M}/2$ &&& \\[2mm] \hline
+%&&&&\\[-3mm]
+2-FSK &$\Delta f=h\cdot \frac{1}{T},\, h_{\min}=0.5$ &&
+  $Q(\sqrt{\frac{E_s}{N_0}})$ 
+  & orthogonal, coherent  \\
+& \qquad \qquad \quad $h_{\min}=1$ &&
+  $\frac{1}{2}e^{-\frac{E_s}{2N_0}}$ 
+  & orthogonal, noncoherent \\[2mm] \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+
+
+\subsubsection{BER - Bitfehlerrate }
+\begin{tabular}{ll}
+	\parbox{10.5cm}{
+	Sobald eine Informationsrate R kleiner als die Kanalkapazität C ist, sind
+	fehlerfreie übertragungen möglich.\\
+	$C= W \log_2 ( 1+\frac{S}{N}) > R$\\
+	Wobei W die Bandbreite des Kanals, N die Rauschenergie $N=N_0 W$ und S die
+	Signalenergie ist.
+	Die Grenze ist bei $C=R \Longrightarrow E_b C$ $E_b$ ist die Bitenergie\\
+
+	$\Longrightarrow \frac{C}{W}= \log_2(1+\frac{E_b C}{N_0 W})$\\ 
+
+	
+	\subsubsection{Spektrale Effizient }
+	Heisst wieviel Bandbreite pro Datenrate gebraucht wird.
+	Die Effizient beinhaltet zwei Kriterien:
+	\begin{enumerate}
+	\item Wieviele Bits können in einer gegeben Bandbreite übertragen werden. Wenn
+	man die Begrenzung durch die SNR beliebig erweitern indem man die Bits/Symbol
+	erhöht.
+	\item Wieviel das Spektrum die Nachbarn überlagert. Je nach Modulation gibts
+	einen breiten Mainlobe mit schwachen Sidelobes oder umgekehrt.
+    \end{enumerate}
+  
+    \subsubsection{Raised-Cosine-Filter }
+    $h(t) = \frac{\sin\left((t/T)\pi\right)}{(t/T)\pi}\cdot
+        \frac{\cos\left(\rho(t/T)\pi\right)}{1-4\rho^2(t/T)^2}$\\
+   
+    \includegraphics[width=5cm]{../MobKom1/bilder/modulation_raised_cosine_frequency.png}
+    \includegraphics[width=5cm]{../MobKom1/bilder/modulation_raised_cosine_time.png} 
+    
+    Das \textbf{Root-Raised-Cosine-Filter} entspricht der Wurzel des
+    Raised-Cosine-Filters und wird angewendet, wenn die Charakteristik 
+    des Raised-Cosine-Filters auf Sender und Empfänger
+    gleichmässig verteilt werden soll.
+    } &\parbox{7cm}{
+	\includegraphics[width=7cm]{../MobKom1/bilder/modulation_SER.png}\\
+	Übersicht einzelner Modulationen mit einer SER von $10^{-5}$
+	}
+\end{tabular}

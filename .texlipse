@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Sun Jun 10 13:44:55 CEST 2012
+markTmpDer=true
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=SignProc.tex
+outputFile=SignProc.pdf
+langSpell=en
+markDer=true
+srcDir=
