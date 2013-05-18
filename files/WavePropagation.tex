@@ -297,14 +297,15 @@ u.a. Eigenschaften von LNA-Verstärkern.\\
 \hline
 \parbox{7cm}{
 	    \textbf{Frequency selective fading (multipath)}
+	    Achtung: Wenn Impulsantwort $h(t)$ mit Diracs gegeben, müssen diese Werte quadriert werden, um die Leistungen $P_k$ zu bekommen!
 	    \begin{liste}
-            \item {\em Mean delay}: $\tau_0=\frac 1{P_T}\sum\limits_k P_k
+	                \item Total power:
+	                $P_T=\sum\limits_k P_k$
+            \item Mean delay: $\tau_0=\frac 1{P_T}\sum\limits_k P_k
             \tau_k$
-            \item {\em RMS delay spread}:\\
-            $\tau_{\text{RMS}}=\sqrt{\frac{1}{P_T}}\sum\limits_k P_k
-            (\tau_k-\tau_0)^2$
-            \item Total power:
-            $P_T=\sum\limits_k P_k$
+            \item RMS delay spread:\\
+            $\tau_{\text{RMS}}=\sqrt{\frac{1}{P_T} \sum\limits_k P_k
+            (\tau_k-\tau_0)^2}$
         \end{liste}
     } 
     & \parbox{5cm}{
@@ -316,11 +317,26 @@ u.a. Eigenschaften von LNA-Verstärkern.\\
 \hline
 \end{tabular}
 
+
 \subsection{Beziehungen zwischen Fading Parameter}
 \begin{liste}
-    \item $T_c \propto  \frac 1{f_m}$ \qquad $T_c$ = Kohärenzzeit, $f_m$ =
-    Dopplerverschiebung (spread)
-    \item $B_c \propto \frac 1{\tau}$ \qquad $B_c$ = Kohärenzbandbreite, $\tau$
-    = Zeitverbreiterung (broadeing)
-    \item $B_c$, $T_c$ unabhängig
+  \item Dopplerverschiebung $f_d = \frac{v}{c} f_{RF}$
+  \item $T_c \propto  \frac 1{f_d}$ \qquad $T_c$ = Kohärenzzeit, $f_d$ =
+  Dopplerverschiebung (spread)
+  \item $B_c \propto \frac 1{\tau}$ \qquad $B_c$ = Kohärenzbandbreite, $\tau$
+  = Zeitverbreiterung (broadening)
+  \item $B_c$, $T_c$ unabhängig
 \end{liste}
+
+
+\subsection{Abschätzungen der Kohärenzbandbreite und -zeit}
+  \begin{tabular}{p{10cm} l}
+    Wenn Frequenz Korrelationsfunktion $> 0.9$
+      & $B_{coh} \approx \frac{1}{50 \tau_{RMS}}$ \\
+    Wenn Frequenz Korrelationsfunktion $> 0.5$
+      & $B_{coh} \approx \frac{1}{5 \tau_{RMS}}$\\
+    Oder
+      & $B_{coh} \approx \frac{1}{2 \pi \tau_{RMS}}$ \\
+    oder bei Zeit-Korrelation $> 0.5$
+      & $T_{coh} \approx \frac{1}{16 \pi f_{d}}$\\
+  \end{tabular}
