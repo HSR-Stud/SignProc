@@ -35,7 +35,7 @@ $$ [I(X)] = \begin{cases}
             		& \text{falls } base=e
 			\end{cases} $$
 
-\textbf{Standartmässig} verwenden wir $base=2$, also bit oder gekürzt \textbf{b}. Binary Unit ist
+\textbf{Standardmässig} verwenden wir $base=2$, also bit oder gekürzt \textbf{b}. Binary Unit ist
 ein Mass für den Informationsgehalt und sollte nicht mit dem Term ``bit'' (Binäres Zeichen) verwechselt
 werden.
 
@@ -263,3 +263,13 @@ möglichst klein ist. \\
 	\includegraphics[width=6cm]{./bilder/Waterfilling.png}
 
 \end{minipage}
+
+
+\skriptsubsection{Hilbert Transform}{36}
+  90° Phase shift:
+  $$\hat{s}(t) = s(t) * \left(\frac{1}{\pi t}\right) \FT \hat{S}(f) = -j \sign(f)$$
+  Example with sine/cosine:
+  $$\mathcal{H}\left\{(A(t) \sin(2 \pi f + \varphi(t))\right\} = A(t) \cos(2 \pi f + \varphi(t)) \qquad \qquad 
+  \mathcal{H}\left\{A(t) \cos(2 \pi f + \varphi(t))\right\} = A(t) \sin(2 \pi f + \varphi(t))$$
+  
+  

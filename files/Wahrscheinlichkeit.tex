@@ -375,4 +375,30 @@
       	\\
       	Für $\boldsymbol{n \to \infty}$ strebt die Verteilung von $Z_n$ gegen die
       	Standardnormalverteilung. \\
+      	
+      	
+ \skriptsubsection{Maximum  a Posteriori}{28}
+   Find the maximum a posteriori for a given a priori and density function for every value in $\mathcal{A}_i$:
+   $$\max_i p_{Y | \mathcal{A}_i}(y) P(\mathcal{A}_i)$$
         
+  \skriptsubsection{Maximum-Likelihood Estimation}{29}
+  Maximum-Likelihood estimation tries to find an optimum solution if a parameter vector
+  $\bm{\theta}$ is unknown.
+  The likelihood of $\bm{\theta}$ with respect to the set of samples is defined as 
+  $p(\mathcal{D} | \bm{\theta}) = \prod_{k=1}^{n} p(\mathbf{x}_k | \bm{\theta})$ 
+  (samples are i.i.d. - independent \& identically distributed).
+  
+  \begin{minipage}{12cm}
+	  Recipe with log-likelihood:
+	  \begin{aufzaehlung}
+	    \item Log-likelihood: $l(\bm{\theta}) = \ln (p(\mathcal{D} | \bm{\theta}))=\sum\limits_{k=1}^n \ln(p(\mathbf{x}_k | \bm{\theta}))$ \quad $\left( \frac{d}{dx} \ln(x) = \frac1x \right)$
+	    \item Derivative: $\nabla_{\bm{\theta}} l = 
+	      \sum\limits_{k=1}^n \nabla_{\bm{\theta}}\ln(p(\mathbf{x}_k | \bm{\theta}))$
+	    \item Setting derivative to zero: $\nabla_{\bm{\theta}} l = 0$ and find solution 
+	      $\bm{\hat{\theta}}=arg~ \underset{\bm{\theta}}{max}~ l(\bm{\theta})$
+	  \end{aufzaehlung}
+  \end{minipage}
+  \begin{minipage}{8cm}
+  	\includegraphics[width=7cm]{./bilder/MaxLikely.png}
+  \end{minipage}
+  
